@@ -1,0 +1,2 @@
+# pyMath
+Assorted math algorithms
