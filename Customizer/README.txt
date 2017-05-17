@@ -1,8 +1,7 @@
 
 INSTRUCTIONS:
 
-To launch the program, you can use the "execute.bat" file found in the main directory "Decision Tree."
-If you prefer, you can directly use the "DecisionTree.jar" file in the dist folder.
+To launch the program, use the "DecisionTree.jar" file.
 
 Once the program opens, you can select import to load an ARFF file into python. I have provided the entire nominal WEKA library
 in the "Arff files" of the main directory. This is just for ease of use as the program has been made to automatically
