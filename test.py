@@ -5,22 +5,19 @@ from tkinter.filedialog import askopenfilename
 
 class findTargetList():
     def __init__(self):
-        self.file = None
-        self.targetPrice = 0
+        self.file = None;
+        self.targetPrice = 0;
         self.checkFileFlag = False;
-        tkinter.Tk().withdraw()
-        self.main()
+        self.menu = [];
+        tkinter.Tk().withdraw();
+        self.main();
 
     def main(self):
         #Program Explanation
         print("This program scans a .csv for a list of items that matches the specified target price. \n" +
               'The first line of the file must start with "target price," followed by a number.')
-        while (self.checkFileFlag == False):
-            self.start()
-
-        #makes sure that the file is set up correctly
-        menu = self.readFile()
-        prices = sorted(menu[1])
+        self.start()
+        prices = sorted(self.menu[1])
         solution = self.findSolution(prices);
 
         #Print solution
@@ -28,25 +25,26 @@ class findTargetList():
             print("No Solution")
         elif not isinstance(solution, list):
             i = menu[1].index(solution)
-            print(menu[0][i], menu[1][i])
+            print(self.menu[0][i], self.menu[1][i])
         else:
             print("Target Price:", self.targetPrice)
             print()
             print("Items:")
             for answer in solution:
                 #match numbers with their items
-                i = menu[1].index(answer)
-                print(menu[0][i], menu[1][i])
+                i = self.menu[1].index(answer)
+                print(self.menu[0][i], self.menu[1][i])
 
         
     def start(self):
-        input("\nPress Enter to open a valid .csv file.")
-        #Open Tkinters file chooser
-        filePath = askopenfilename()
-        if (self.checkFile(filePath)):
-            self.checkFileFlag = True;
-        else:
-            self.checkFileFlag = False;
+        while (self.checkFileFlag == False):
+            input("\nPress Enter to open a valid .csv file.")
+            #Open Tkinters file chooser
+            filePath = askopenfilename()
+            if (self.checkFile(filePath)):
+                self.checkFileFlag = True;
+            else:
+                self.checkFileFlag = False;
         
 
     def checkFile(self, path):
@@ -72,31 +70,27 @@ class findTargetList():
                 except:
                     print('Could not convert target price to numeric.')
                     return False
-        return True
+            item = list()
+            price = list()
+            for line in self.file:
+                row = line.split(",")
+                if (row[0] == "\n") or (row[0] == ""):
+                    pass
+                else:
+                    item.append(row[0])
+                    #Check if 2nd value is a string or not.
+                    numString = row[1]
+                    numString = numString.replace("$", "").replace(" ", "")
+                    try:
+                        number = round(float(numString), 2)
+                    except:
+                        print('Could not convert Item: "', item, '" price to numeric.' +
+                              " Please try again.")
+                        return False
+                    price.append(number)
 
-    def readFile(self):
-        item = list()
-        price = list()
-        for line in self.file:
-            row = line.split(",")
-            if (row[0] == "\n") or (row[0] == ""):
-                pass
-            else:
-                item.append(row[0])
-                price.append(self.stringToNum(row[1], row[0]))
-        return(item, price)
-        
-
-    def stringToNum(self, numString, item):
-        numString = numString.replace("$", "").replace(" ", "")
-        try:
-            number = round(float(numString), 2)
-            #number = int(round(float(numString), 2)*100)
-        except:
-            print('Could not convert Item: "', item, '" price to numeric.' +
-                  " Please try again.")
-            return self.start()
-        return number
+            self.menu = [item, price]
+            return True
 
     def findSolution(self, subset):
         allSums = {0} #Final Set, the one that will be iterated through
@@ -121,7 +115,7 @@ class findTargetList():
                 #Check to see if the target price has been found
                 if addition == self.targetPrice: 
                     solution.append(findOrigin[j][0]) #the first spot is always in the subset list
-                    solution.append(i) #i is also a list price
+                    solution.append(i)
                     
                     last = findOrigin[j][1] #set the stop flag.
                     
