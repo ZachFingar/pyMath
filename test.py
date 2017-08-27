@@ -68,10 +68,7 @@ class findTargetList():
                 #Make the second value numerical
                 targetString = first[1].strip("\n").replace("$", "") 
                 try:
-                    #Convert it to a float, round by 2, then multiply by 100 to remove decimal
-                    #Convert it to an int and then the number theory sets can work properly.
                     self.targetPrice = round(float(targetString), 2)
-                    #self.targetPrice = int(round(float(targetString), 2)*100)
                 except:
                     print('Could not convert target price to numeric.')
                     return False
@@ -124,7 +121,7 @@ class findTargetList():
                 #Check to see if the target price has been found
                 if addition == self.targetPrice: 
                     solution.append(findOrigin[j][0]) #the first spot is always in the subset list
-                    solution.append(i)
+                    solution.append(i) #i is also a list price
                     
                     last = findOrigin[j][1] #set the stop flag.
                     
